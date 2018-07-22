@@ -8,7 +8,6 @@ export default class Pathfinder extends cc.Component {
     start(): void {
         this.display.opacity = 0;
         wx.onMessage(data => {
-            console.log(data);
             let command: string = data.command;
             switch (command) {
                 case 'DisplayFriendsScore': {
@@ -26,9 +25,14 @@ export default class Pathfinder extends cc.Component {
                     wx.getUserCloudStorage({
                         keyList: ['score'],
                         success: res => {
-                            let obj: any = JSON.parse(res.KVDataList[0].value);
-                            console.log(`before: ${[obj.percentage, obj.nKill]}, now: ${[score, nKill]}`);
-                            if (score > obj.percentage || (score === obj.percentage && nKill < obj.nKill)) {
+                            let obj: any = null;
+                            if (res.KVDataList.length > 0) {
+                                obj = JSON.parse(res.KVDataList[0].value);
+                            }
+                            if (res.KVDataList.length === 0 || // this user had no data before
+                                score > obj.percentage || // this user broke his record
+                                (score === obj.percentage && nKill < obj.nKill) // this user didn't break his record
+                            ) {
                                 wx.setUserCloudStorage({
                                     KVDataList: [
                                         {
@@ -40,6 +44,9 @@ export default class Pathfinder extends cc.Component {
                                     ]
                                 });
                             }
+                        },
+                        fail: () => {
+                            console.log('fail');
                         }
                     });
                     break;
