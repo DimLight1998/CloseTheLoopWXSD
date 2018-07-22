@@ -34,12 +34,6 @@ export default class Pathfinder extends cc.Component {
         wx.onMessage(data => {
             let command: string = data.command;
             switch (command) {
-                case 'SetResolution': {
-                    let ratio: number = data.param1 / data.param2;
-                    console.log(ratio);
-                    this.node.setScale(ratio, 1);
-                    break;
-                }
                 case 'DisplayFriendsScore': {
                     this.refreshFriendScore();
                     this.display.opacity = 255;
