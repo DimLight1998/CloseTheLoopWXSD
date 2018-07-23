@@ -5,7 +5,7 @@ class KVDataListItem {
     value: string;
 }
 
-class PersonData {
+    class PersonData {
     KVDataList: KVDataListItem[];
     avatarUrl: string;
     nickname: string;
